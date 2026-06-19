@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>briefly</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;background:#f7f7f5}
+
+/* Nav */
+.bnav{background:#fff;border-bottom:1px solid #e8e8e2;overflow-x:auto;position:sticky;top:0;z-index:50}
+.bni{display:flex;align-items:center;padding:0 14px;min-width:max-content}
+.blogo{font-size:16px;font-weight:800;letter-spacing:-.03em;padding:12px 14px 12px 0;border-right:1px solid #e8e8e2;margin-right:8px;color:#111827;flex-shrink:0}
+.bac{color:#22c55e}
+.bnb{background:none;border:none;border-bottom:2px solid transparent;color:#6b7280;padding:13px 10px;cursor:pointer;font-size:12px;white-space:nowrap;font-family:inherit}
+.bnb.on{color:#111827;font-weight:600;border-bottom-color:#22c55e}
+
+/* Market bar */
+.bmkt{background:#fff;border-bottom:1px solid #e8e8e2;overflow-x:auto}
+.bmi{display:flex;padding:0 14px;min-width:max-content}
+.btile{padding:6px 11px;border-right:1px solid #f3f4f6;flex-shrink:0;min-width:66px}
+.btl{font-size:9px;color:#9ca3af;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:1px}
+.btp{font-size:12px;font-weight:700;color:#111827}
+.btc{font-size:10px;font-weight:600}
+.up{color:#16a34a}.dn{color:#dc2626}.fl{color:#9ca3af}
+
+/* Topic pills */
+.btbar{background:#fff;border-bottom:1px solid #e8e8e2;overflow-x:auto}
+.btbi{display:flex;align-items:center;padding:7px 14px;gap:5px;min-width:max-content}
+.btlbl{font-size:10px;font-weight:700;color:#9ca3af;letter-spacing:.06em;margin-right:3px;flex-shrink:0}
+.bpill{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:100px;border:1px solid #e5e7eb;background:#fff;cursor:pointer;font-size:11px;color:#6b7280;font-family:inherit;transition:all .12s}
+.bpill.on{background:rgba(34,197,94,.09);border-color:#86efac;color:#166534;font-weight:600}
+.bpdot{width:6px;height:6px;border-radius:50%;background:#d1d5db;flex-shrink:0}
+.bpill.on .bpdot{background:#22c55e}
+.bpcnt{font-size:10px;padding:0 4px;border-radius:7px;background:#f3f4f6;color:#9ca3af}
+.bpill.on .bpcnt{background:rgba(34,197,94,.15);color:#166534}
+
+/* Body */
+.bbody{padding:12px 14px}
+.bsrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.bslbl{font-size:10px;font-weight:700;color:#9ca3af;letter-spacing:.07em;text-transform:uppercase}
+.bsmpl{margin-left:6px;font-size:9px;background:rgba(251,191,36,.2);color:#92400e;padding:1px 4px;border-radius:3px;border:1px solid rgba(251,191,36,.4);font-weight:700}
+.btpbadge{margin-left:6px;font-size:9px;background:rgba(34,197,94,.1);color:#166534;padding:1px 5px;border-radius:3px;border:1px solid #86efac;font-weight:700}
+.bhide{font-size:11px;color:#9ca3af;background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
+.bhide.on{color:#22c55e;font-weight:600}
+
+/* 2-column article grid */
+.bartgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;align-items:start}
+
+/* Article card */
+.bcard{background:#fff;border:1px solid #e8e8e2;border-radius:12px;padding:14px 15px;cursor:pointer;transition:border-color .15s,box-shadow .15s;position:relative}
+.bcard:hover{border-color:#d1d5db;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+/* Read state: subtle green left border + muted */
+.bcard.brd{opacity:.65;border-left:3px solid #22c55e}
+.bcard.brd .bhl{color:#6b7280}
+/* Read badge — top-right ✓ */
+.brd-badge{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;background:#22c55e;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0}
+.bctop{display:flex;align-items:center;gap:7px;margin-bottom:7px;padding-right:26px}
+.bbdg{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap}
+.bctime{font-size:10px;color:#9ca3af}
+.bhl{font-size:14px;font-weight:600;line-height:1.4;margin-bottom:7px;color:#111827}
+.bcdesc{font-size:12px;color:#6b7280;line-height:1.55;margin-bottom:10px}
+.btags{display:flex;flex-wrap:wrap;gap:3px}
+.btag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:100px;border:1px solid #e5e7eb;color:#6b7280;cursor:pointer;transition:all .1s;white-space:nowrap}
+.btag.on{background:rgba(34,197,94,.08);border-color:#86efac;color:#166534;font-weight:600}
+
+/* ── Article view ── */
+.bview{max-width:700px;margin:0 auto;padding:16px}
+.bback{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #e5e7eb;color:#374151;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;margin-bottom:18px;transition:border-color .12s}
+.bback:hover{border-color:#9ca3af}
+.bview-meta{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.bview-hl{font-size:20px;font-weight:700;color:#111827;line-height:1.4;margin-bottom:14px}
+.bview-body{font-size:14px;color:#374151;line-height:1.8;margin-bottom:16px}
+.bview-note{font-size:11px;color:#9ca3af;font-style:italic;padding:8px 12px;background:#f9fafb;border-radius:7px;border:1px solid #e5e7eb;margin-bottom:16px}
+.bview-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.baibtn{background:#111827;color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.baibtn:disabled{background:#f3f4f6;color:#9ca3af;cursor:default}
+.bopen-lnk{display:inline-block;padding:7px 14px;border:1px solid #e5e7eb;border-radius:7px;font-size:12px;color:#374151;text-decoration:none;font-weight:500;transition:border-color .12s}
+.bopen-lnk:hover{border-color:#9ca3af}
+.baiout{font-size:12px;color:#374151;line-height:1.75;white-space:pre-line;background:#f9fafb;padding:10px 12px;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:14px}
+.bview-divider{border:none;border-top:1px solid #e8e8e2;margin:16px 0}
+.bview-tags{display:flex;flex-wrap:wrap;gap:5px}
+
+/* Newsletter card */
+.bnlcard{background:#fff;border:1px solid #e8e8e2;border-radius:12px;padding:13px 15px;margin-bottom:7px;cursor:pointer;transition:border-color .15s,box-shadow .15s;position:relative}
+.bnlcard:hover{border-color:#d1d5db;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bnlcard.brd{opacity:.65;border-left:3px solid #22c55e}
+.bnlcard-inner{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-right:28px}
+.bnlt{font-size:14px;font-weight:700;color:#111827}
+.bnlm{font-size:11px;color:#9ca3af;margin-top:2px}
+.bttl{font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;white-space:nowrap;flex-shrink:0}
+.bok{background:rgba(34,197,94,.1);color:#15803d}
+.bwrn{background:rgba(234,179,8,.15);color:#92400e}
+.bur{background:rgba(220,38,38,.1);color:#991b1b}
+
+/* Calendar */
+.bcalf{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.bcfbtn{padding:3px 9px;border-radius:100px;border:1px solid #e5e7eb;background:#fff;color:#6b7280;font-size:10px;cursor:pointer;font-family:inherit}
+.bcfbtn.on{background:#111827;color:#fff;border-color:#111827;font-weight:600}
+.bcalev{background:#fff;border:1px solid #e8e8e2;border-radius:8px;padding:8px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.bcalev.btoday{border-color:#86efac;background:rgba(34,197,94,.03)}
+.bevn{font-size:13px;font-weight:600;color:#111827}
+.bevd{font-size:10px;color:#9ca3af;margin-top:1px}
+.btrow{display:flex;gap:3px;flex-wrap:wrap}
+.bctag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;white-space:nowrap}
+.btbdge{margin-left:7px;font-size:9px;background:#16a34a;color:#fff;padding:1px 5px;border-radius:3px;font-weight:700;vertical-align:middle}
+.bph{text-align:center;padding:40px 20px;color:#9ca3af;grid-column:1/-1}
+.bph-t{font-size:14px;font-weight:600;margin-bottom:5px;color:#374151}
+.bph-s{font-size:12px}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <nav class="bnav"><div class="bni" id="bni"><div class="blogo">briefl<span class="bac">y</span></div></div></nav>
+  <div class="bmkt"><div class="bmi" id="bmi"></div></div>
+  <div id="btp"></div>
+  <div class="bbody" id="bbc"></div>
+</div>
+
+<script>
+const E=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const SS={"Bloomberg":"background:#dbeafe;color:#1e40af","FT":"background:#fee2e2;color:#991b1b","Reuters":"background:#d1fae5;color:#065f46","WSJ":"background:#fef3c7;color:#92400e","BBC":"background:#fee2e2;color:#b91c1c","Guardian":"background:#d1fae5;color:#065f46","AP News":"background:#f3f4f6;color:#374151","CNBC":"background:#fef3c7;color:#b45309","The Verge":"background:#ede9fe;color:#5b21b6","Wired":"background:#f3f4f6;color:#111827","Axios":"background:#f0fdf4;color:#166534"};
+const ss=n=>SS[n]||"background:#f3f4f6;color:#6b7280";
+const CS={"US":"background:#dbeafe;color:#1e40af","UK":"background:#fce7f3;color:#9d174d","EU":"background:#e0e7ff;color:#3730a3","JP":"background:#fee2e2;color:#991b1b","CN":"background:#fef3c7;color:#92400e","CA":"background:#d1fae5;color:#065f46","AU":"background:#fef3c7;color:#b45309","IN":"background:#f3e8ff;color:#6b21a8","BR":"background:#d1fae5;color:#15803d","KR":"background:#dbeafe;color:#1d4ed8","MX":"background:#d1fae5;color:#065f46"};
+const CAS={"Central Banks":"background:rgba(109,40,217,.1);color:#5b21b6","Inflation":"background:rgba(220,38,38,.1);color:#991b1b","Labour":"background:rgba(37,99,235,.1);color:#1e40af","Growth":"background:rgba(22,163,74,.1);color:#15803d","Activity":"background:rgba(8,145,178,.1);color:#0e7490"};
+const IPS={high:"background:rgba(220,38,38,.1);color:#991b1b;font-weight:700",medium:"background:rgba(234,179,8,.12);color:#92400e;font-weight:700"};
+const TP=["FX & Rates","Macro","AI & Tech","Geopolitics","Energy","EM","Equities","Sports"];
+const TK={"FX & Rates":["dollar","euro","pound","yen","yield","bond"," rate","spread","dxy","gbp","usd","currency"],"Macro":["gdp","inflation","economy","federal reserve","ecb","boe","monetary","cpi","pce","employment","deficit"],"AI & Tech":["ai ","artificial intelligence","chip","software","nvidia","openai","tech ","llm"],"Geopolitics":["war","conflict","sanction","tariff","nato","ukraine","taiwan","iran","military","election"],"Energy":["oil","gas","opec","brent","wti","crude","energy","lng"],"EM":["emerging market","china","india","brazil","brics","pboc","hang seng","sensex"],"Equities":["stock","share","earnings","ipo","dividend","nasdaq","s&p","ftse","rally","buyback"],"Sports":["football","soccer","nfl","nba","premier league","transfer","match"]};
+function gT(t,d){const s=(t+" "+d).toLowerCase();return TP.filter(tp=>TK[tp]?.some(k=>s.includes(k))).slice(0,3);}
+function ago(d){const m=Math.floor((Date.now()-new Date(d))/60000);if(m<60)return m+"m ago";const h=Math.floor(m/60);if(h<24)return h+"h ago";return Math.floor(h/24)+"d ago";}
+function ntl(ra){const h=Math.floor((172800000-(Date.now()-ra))/3600000);if(h<=0)return{l:"Expired",c:"bur"};if(h<3)return{l:h+"h left",c:"bur"};if(h<12)return{l:h+"h left",c:"bwrn"};return{l:h+"h left",c:"bok"};}
+
+const N=Date.now();
+const AR=[
+  {id:"1",src:"Bloomberg",date:new Date(N-240000).toISOString(),
+   title:"Fed holds rates as inflation data complicates Warsh's first meeting",
+   desc:"Four FOMC dissenters signal growing hawkish tilt. Markets now pricing next move as a hike rather than a cut, with fed funds expected above 4.5% through 2026.",
+   full:"Federal Reserve Chair Kevin Warsh's first FOMC meeting ended with rates unchanged, as committee members clashed over the path forward. Four dissenters voted against the hold, arguing inflation data over the past two months warranted pre-emptive action. Fed funds futures now price a 68% probability of a hike at the September meeting, a sharp reversal from the two cuts markets had been pricing in January. The 2-year Treasury yield rose 12bps on the day to 4.89%, while the S&P 500 fell 0.9%. Warsh stressed data dependence and declined to provide forward guidance, a deliberate departure from his predecessor's communication style."},
+  {id:"2",src:"FT",date:new Date(N-1080000).toISOString(),
+   title:"Hormuz blockade enters fourth month with no resolution in sight",
+   desc:"Polymarket odds of Strait reopening by end of June fall below 20%. December Brent futures approach $95 as inventories deplete faster than anticipated.",
+   full:"The Iranian naval blockade of the Strait of Hormuz, now in its fourth month, shows no signs of abating despite back-channel diplomatic efforts by Oman and Qatar. Prediction market Polymarket puts odds of a reopening before July 1 at 18%, down from 41% a month ago. The energy impact has been severe: Brent crude December futures traded above $93 intraday, while European gas prices hit a 14-month high. Global shipping insurers have raised war-risk premiums for the Persian Gulf to 1.8% of vessel value per voyage, levels last seen during the 2019 tanker attacks. US Strategic Petroleum Reserve releases have partially offset supply disruptions but analysts warn the buffer is running thin."},
+  {id:"3",src:"Reuters",date:new Date(N-1860000).toISOString(),
+   title:"Nvidia beats on revenue again but guidance disappoints growth bulls",
+   desc:"85% revenue growth and 62% operating margins failed to impress investors expecting more. SpaceX IPO filing same day stole the narrative.",
+   full:"Nvidia reported quarterly revenue of $44.1bn, up 85% year-on-year, with data centre revenue of $39.3bn driven by continued hyperscaler demand for Blackwell chips. Despite the blockbuster numbers, shares fell 4.2% after-hours as the company guided to revenue of $45.5-47.5bn for the next quarter, the midpoint falling short of the $47.9bn analyst consensus. Operating margins of 62.1% were also fractionally below estimates. CEO Jensen Huang cited supply constraints rather than demand weakness, noting that customer order books remain oversubscribed. The narrative was further complicated by SpaceX filing its long-awaited IPO prospectus the same morning, drawing investor attention away from the earnings call."},
+  {id:"4",src:"WSJ",date:new Date(N-2820000).toISOString(),
+   title:"UK gilt yields surpass Truss-era highs as Starmer faces cabinet revolt",
+   desc:"30-year gilt yields breach 5.4% as four cabinet ministers publicly oppose welfare reform. Sterling falls 0.8% against the dollar.",
+   full:"UK 30-year gilt yields breached 5.4% Thursday, exceeding the levels that triggered the 2022 LDI crisis under Liz Truss. The move was catalysed by four cabinet ministers — including the Health Secretary and Home Secretary — publicly opposing the government's welfare reform bill in a rare show of internal dissent. The Office for Budget Responsibility has signalled it will revise its fiscal forecasts if the bill fails, adding to concerns about the UK's fiscal trajectory. Sterling fell 0.8% against the dollar to 1.2558, its weakest level since February. The Bank of England is expected to face growing pressure to respond, though Governor Bailey has insisted monetary policy cannot substitute for fiscal consolidation."},
+  {id:"5",src:"Bloomberg",date:new Date(N-4380000).toISOString(),
+   title:"China's PBOC cuts reserve ratio in third easing move this year",
+   desc:"Move signals escalating policy urgency as property sector drag intensifies. Offshore yuan weakens past 7.35; Hang Seng drops 1.4%.",
+   full:"The People's Bank of China announced a 25bp cut to the reserve requirement ratio, releasing approximately 500bn yuan of liquidity into the banking system. The move marks the third RRR reduction this year and comes despite recent yuan weakness, signalling the PBOC is prioritising domestic growth support over exchange rate stability. Evergrande-linked developer Country Garden reported a wider-than-expected H1 loss, adding to property sector concerns. The offshore yuan weakened past 7.35 per dollar, its lowest since October, while the Hang Seng Index fell 1.4%. Analysts at Goldman Sachs revised their China GDP forecast down to 4.2% for 2026, citing a prolonged property adjustment."},
+  {id:"6",src:"The Verge",date:new Date(N-5700000).toISOString(),
+   title:"OpenAI launches GPT-5 with autonomous agent and coding capabilities",
+   desc:"New model surpasses human expert benchmarks across legal and scientific domains. Enterprise pricing set at three times the GPT-4 tier.",
+   full:"OpenAI unveiled GPT-5, its most capable model to date, claiming state-of-the-art performance across legal reasoning, scientific research, and software engineering benchmarks. In internal evals, GPT-5 scored in the 95th percentile on the Bar exam and outperformed PhD-level human experts on a subset of graduate-level science questions. The model ships with a new autonomous agent framework, allowing it to complete multi-step tasks — booking travel, writing and executing code, filing documents — without human intervention at each step. Enterprise access is priced at three times the GPT-4 rate, starting at $0.06 per 1,000 output tokens. OpenAI CEO Sam Altman said the company would not be releasing the weights publicly, citing safety concerns."},
+  {id:"7",src:"Bloomberg",date:new Date(N-7200000).toISOString(),
+   title:"Dollar index hits three-year high as safe-haven demand surges globally",
+   desc:"DXY breaks above 108 for the first time since 2023. EM currencies under pressure — Turkish lira and rand each down over 3%.",
+   full:"The US Dollar Index (DXY) broke above 108 for the first time since November 2023, driven by safe-haven demand amid geopolitical uncertainty and a repricing of Federal Reserve rate expectations. The move came as Hormuz disruptions boosted energy costs for net-importing economies, widening current account deficits across emerging markets. The Turkish lira fell 3.4% to a record low of 38.2 per dollar, while the South African rand shed 3.1%. Asian currencies were broadly weaker, with the Korean won and Indonesian rupiah each down over 1.5%. DXY strength is self-reinforcing in the near term as dollar-denominated debt servicing becomes more expensive for EM sovereigns, analysts at JPMorgan noted."},
+  {id:"8",src:"FT",date:new Date(N-9000000).toISOString(),
+   title:"ECB signals September pause as eurozone PMI beats expectations",
+   desc:"Flash PMI surprises to the upside across Germany and France. Lagarde requires further evidence before committing to additional rate reductions.",
+   full:"Flash PMI data for June surprised to the upside in both Germany and France, with the composite eurozone reading rising to 51.8 against a consensus estimate of 50.4. Germany's manufacturing PMI entered expansionary territory for the first time since early 2024, driven by export orders from Asia. ECB President Christine Lagarde said the board would require \"further evidence of sustained disinflation\" before committing to additional rate reductions at September's meeting, despite markets having priced in a 60% probability of a cut. Core inflation in the eurozone fell to 2.6% in May but services inflation remains sticky at 4.1%. The euro rose 0.4% against the dollar on the data release."},
+  {id:"9",src:"Guardian",date:new Date(N-11100000).toISOString(),
+   title:"India overtakes Japan to become world's fourth largest economy",
+   desc:"IMF revises rankings after India's nominal dollar GDP crosses $4.7tn. Rupee strengthens; Sensex hits all-time high for the third session.",
+   full:"India's nominal GDP in dollar terms crossed $4.7 trillion in the latest IMF revision, officially overtaking Japan to become the world's fourth largest economy. The milestone, long anticipated by economists, was achieved earlier than many projections due to a combination of robust domestic growth averaging 7.1% over the past three years and a relative depreciation of the yen. Indian equities responded positively: the Sensex reached an all-time high for the third consecutive session while the rupee strengthened 0.6% to 82.4 per dollar. Prime Minister Modi's government cited the milestone as validation of its infrastructure investment programme. India is now projected by the IMF to overtake Germany for third place by 2027 at current growth trajectories."},
+  {id:"10",src:"Reuters",date:new Date(N-13200000).toISOString(),
+   title:"OPEC+ announces surprise output cut as Brent slips toward $88",
+   desc:"Cartel responds to weakening demand from China and rising US inventory builds. Saudi Arabia leads a 500k bpd reduction effective August.",
+   full:"OPEC+ announced an unscheduled additional output cut of 500,000 barrels per day effective August 1, catching markets off-guard ahead of a scheduled ministerial meeting next month. Saudi Arabia will bear the bulk of the reduction, consistent with its role as the cartel's swing producer. The decision was prompted by Brent crude sliding toward $88 on the back of weaker-than-expected Chinese demand data and a 4.2 million barrel US inventory build reported by the EIA on Wednesday. Brent crude rose 2.1% on the news to $91.40 before paring gains. The cut deepens tension with Russia, which has repeatedly missed its own production targets, and with non-OPEC producers including Brazil and Guyana who continue to grow output."},
+].map(a=>({...a,topics:gT(a.title,a.desc)}));
+
+const IX=[{l:"S&P 500",p:5847.2,c:0.30},{l:"Nasdaq",p:18923,c:-0.23},{l:"Dow",p:42340,c:0.18},{l:"FTSE 100",p:8421,c:0.37},{l:"DAX",p:18934,c:0.52},{l:"Nikkei",p:39210,c:-0.41},{l:"Hang Seng",p:22341,c:-0.87},{l:"US 10Y",p:4.71,c:1.72,f:v=>v.toFixed(2)+"%"},{l:"Brent",p:91.40,c:-1.21,f:v=>"$"+v.toFixed(2)},{l:"DXY",p:107.92,c:0.41},{l:"USD/JPY",p:161.3,c:0.40},{l:"GBP/USD",p:1.2634,c:-0.71,f:v=>v.toFixed(4)},{l:"Gold",p:2341,c:0.53},{l:"VIX",p:17.82,c:2.47}];
+
+const NL=[
+  {id:"nl1",sub:"Points of Return",from:"Bloomberg",date:"Today 06:14",ra:N-21600000,
+   body:"Warsh's first FOMC meeting has set a hawkish tone that markets were not positioned for. The four dissents are not a rounding error — they represent a genuine split on the committee between those who see the current rate as restrictive enough and those who believe it isn't. The implied path in fed funds futures has shifted dramatically: we're now pricing a hike by Q4, not cuts. For equity markets, this matters most at the long end of the curve. Watch the 10-year real yield — if it breaks above 2.2%, expect multiple compression to resume in rate-sensitive sectors."},
+  {id:"nl2",sub:"Markets Daily",from:"Bloomberg",date:"Today 05:30",ra:N-23400000,
+   body:"Asia-Pacific markets opened broadly lower Thursday as the combination of Hormuz supply anxiety and dollar strength weighed on risk sentiment. The Nikkei fell 0.4%, partly reversed by yen weakness. Hong Kong's Hang Seng dropped 1.4% following the PBOC RRR cut, which markets read as a sign of stress rather than stimulus. The key watchpoint for today's European session is the flash PMI data at 09:00 CET — a miss would push the ECB September cut probability back above 70% and likely provide some relief to European rates. Brent is holding above $91 following the OPEC+ cut announcement."},
+  {id:"nl3",sub:"The Macro Brief",from:"Axios",date:"Yesterday",ra:N-108000000,
+   body:"Three forces are simultaneously tightening financial conditions: a re-pricing of Fed cuts, dollar strength feeding into EM stress, and energy costs rising on Hormuz disruption. History suggests that when all three move together, the risk of a credit event in EM increases meaningfully. Turkey and South Africa are the most vulnerable near term given their current account positions and FX reserve levels. The UK gilt market is becoming an outlier — it now trades with a higher 30-year yield than Italy, a striking development that reflects the market's assessment of UK fiscal credibility post-Truss."},
+];
+
+const CAL=[{date:"2026-06-18",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-06-18",ev:"BOE Rate Decision",cat:"Central Banks",imp:"high",co:"UK"},{date:"2026-06-19",ev:"UK CPI",cat:"Inflation",imp:"high",co:"UK"},{date:"2026-06-25",ev:"US GDP Final (Q1)",cat:"Growth",imp:"high",co:"US"},{date:"2026-06-27",ev:"US PCE Deflator",cat:"Inflation",imp:"high",co:"US"},{date:"2026-06-30",ev:"China NBS PMI",cat:"Activity",imp:"high",co:"CN"},{date:"2026-07-02",ev:"US Non-Farm Payrolls",cat:"Labour",imp:"high",co:"US"},{date:"2026-07-10",ev:"US CPI",cat:"Inflation",imp:"high",co:"US"},{date:"2026-07-15",ev:"China GDP (Q2)",cat:"Growth",imp:"high",co:"CN"},{date:"2026-07-21",ev:"Japan CPI",cat:"Inflation",imp:"medium",co:"JP"},{date:"2026-07-24",ev:"RBA Rate Decision",cat:"Central Banks",imp:"medium",co:"AU"},{date:"2026-07-29",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-07-31",ev:"BOJ Rate Decision",cat:"Central Banks",imp:"high",co:"JP"},{date:"2026-08-01",ev:"US Non-Farm Payrolls",cat:"Labour",imp:"high",co:"US"},{date:"2026-08-07",ev:"BOE MPC Decision",cat:"Central Banks",imp:"high",co:"UK"},{date:"2026-08-13",ev:"US CPI",cat:"Inflation",imp:"high",co:"US"},{date:"2026-08-15",ev:"Japan GDP (Q2)",cat:"Growth",imp:"high",co:"JP"},{date:"2026-08-21",ev:"Jackson Hole Symposium",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-09-04",ev:"US Non-Farm Payrolls",cat:"Labour",imp:"high",co:"US"},{date:"2026-09-10",ev:"ECB Rate Decision",cat:"Central Banks",imp:"high",co:"EU"},{date:"2026-09-16",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-09-17",ev:"BOE MPC Decision",cat:"Central Banks",imp:"high",co:"UK"},{date:"2026-09-24",ev:"BOJ Rate Decision",cat:"Central Banks",imp:"high",co:"JP"},{date:"2026-10-09",ev:"US CPI",cat:"Inflation",imp:"high",co:"US"},{date:"2026-10-15",ev:"China GDP (Q3)",cat:"Growth",imp:"high",co:"CN"},{date:"2026-10-22",ev:"ECB Rate Decision",cat:"Central Banks",imp:"high",co:"EU"},{date:"2026-10-28",ev:"BOJ Rate Decision",cat:"Central Banks",imp:"high",co:"JP"},{date:"2026-11-04",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-11-05",ev:"BOE MPC Decision",cat:"Central Banks",imp:"high",co:"UK"},{date:"2026-11-06",ev:"US Non-Farm Payrolls",cat:"Labour",imp:"high",co:"US"},{date:"2026-12-09",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-12-11",ev:"ECB Rate Decision",cat:"Central Banks",imp:"high",co:"EU"},{date:"2026-12-17",ev:"BOE MPC Decision",cat:"Central Banks",imp:"high",co:"UK"}];
+
+const V={sec:"Feed",tps:[],sum:{},sl:{},read:{},hideRead:false,nls:{},nll:{},nlread:{},cf:"All",view:null,viewType:null};
+const NAV=["Feed","Markets","Macro","Geopolitics","AI & Tech","Sports","Trending","Newsletters","Calendar"];
+const SM={Markets:["Equities","FX & Rates"],Macro:["Macro","FX & Rates"],Geopolitics:["Geopolitics"],"AI & Tech":["AI & Tech"],Sports:["Sports"]};
+
+// Market bar
+document.getElementById("bmi").innerHTML=IX.map(ix=>{const u=ix.c>0,d=ix.c<0;return`<div class="btile"><div class="btl">${ix.l}</div><div class="btp">${ix.f?ix.f(ix.p):ix.p.toLocaleString("en-US",{maximumFractionDigits:ix.p>999?0:2})}</div><div class="btc ${u?"up":d?"dn":"fl"}">${(u?"+":"")+ix.c.toFixed(2)}%</div></div>`;}).join("");
+
+// Nav
+const bni=document.getElementById("bni");
+NAV.forEach(n=>{const b=document.createElement("button");b.className="bnb";b.textContent=n;b.dataset.s=n;b.onclick=()=>{V.sec=n;V.tps=[];V.view=null;V.viewType=null;draw();};bni.appendChild(b);});
+
+function draw(){
+  document.querySelectorAll(".bnb").forEach(b=>b.classList.toggle("on",b.dataset.s===V.sec));
+
+  // Topic bar — Feed only, not when in article view
+  const tp=document.getElementById("btp");
+  if(V.sec==="Feed"&&!V.view){
+    const base=AR;const cnt={All:base.length};TP.forEach(t=>{cnt[t]=base.filter(a=>a.topics.includes(t)).length;});
+    const items=[{l:"All",ia:true,c:cnt.All},...TP.filter(t=>cnt[t]>0).map(t=>({l:t,ia:false,c:cnt[t]}))];
+    tp.innerHTML=`<div class="btbar"><div class="btbi"><span class="btlbl">TOPICS</span>${items.map(({l,ia,c})=>{const on=ia?(V.tps.length===0):V.tps.includes(l);return`<button class="bpill${on?" on":""}" data-pt="${ia?"__all":E(l)}"><span class="bpdot"></span><span>${E(l)}</span><span class="bpcnt">${c}</span></button>`;}).join("")}</div></div>`;
+    tp.querySelectorAll(".bpill").forEach(b=>b.onclick=()=>{const t=b.dataset.pt;if(t==="__all"){V.tps=[];}else{const i=V.tps.indexOf(t);if(i>=0)V.tps.splice(i,1);else V.tps.push(t);}draw();});
+  } else {tp.innerHTML="";}
+
+  const bc=document.getElementById("bbc");
+
+  // ── Article view ──
+  if(V.view&&V.viewType==="article"){
+    const a=AR.find(x=>x.id===V.view);if(!a)return;
+    const sum=V.sum[a.id],sl=V.sl[a.id];
+    bc.innerHTML=`<div class="bview">
+      <button class="bback" id="bback">← Back to feed</button>
+      <div class="bview-meta">
+        <span class="bbdg" style="${ss(a.src)}">${E(a.src)}</span>
+        <span style="font-size:11px;color:#9ca3af">${ago(a.date)}</span>
+        ${a.topics.map(t=>`<span class="btag">${E(t)}</span>`).join("")}
+      </div>
+      <div class="bview-hl">${E(a.title)}</div>
+      <div class="bview-body">${E(a.full||a.desc)}</div>
+      <div class="bview-note">In production, the full article text loads from the source via RSS. Paywalled articles (FT, WSJ) open externally.</div>
+      <div class="bview-actions">
+        <button class="baibtn" id="baibtn" ${sl||sum?"disabled":""}>${sl?"Summarising…":sum?"✓ Summarised":"⚡ AI Summarise"}</button>
+        <a class="bopen-lnk" href="#" onclick="return false">Open full article ↗</a>
+      </div>
+      ${sum?`<div class="baiout">${E(sum)}</div>`:""}
+    </div>`;
+    document.getElementById("bback").onclick=()=>{V.read[a.id]=true;V.view=null;V.viewType=null;draw();};
+    const aib=document.getElementById("baibtn");if(aib)aib.onclick=()=>doSum(a.id);
+    return;
+  }
+
+  // ── Newsletter view ──
+  if(V.view&&V.viewType==="newsletter"){
+    const nl=NL.find(x=>x.id===V.view);if(!nl)return;
+    const tl=ntl(nl.ra),sum=V.nls[nl.id],sl=V.nll[nl.id];
+    bc.innerHTML=`<div class="bview">
+      <button class="bback" id="bback">← Back to newsletters</button>
+      <div class="bview-meta">
+        <span style="font-size:12px;font-weight:600;color:#374151">${E(nl.from)}</span>
+        <span style="font-size:11px;color:#9ca3af">${nl.date}</span>
+        <span class="bttl ${tl.c}">${tl.l}</span>
+      </div>
+      <div class="bview-hl">${E(nl.sub)}</div>
+      <div class="bview-body">${E(nl.body||"")}</div>
+      <div class="bview-note">In production, full newsletter content loads from Gmail via the connected MCP.</div>
+      <div class="bview-actions">
+        <button class="baibtn" id="bnlaibtn" ${sl||sum?"disabled":""}>${sl?"Summarising…":sum?"✓ Summarised":"⚡ AI Summarise"}</button>
+      </div>
+      ${sum?`<div class="baiout">${E(sum)}</div>`:""}
+    </div>`;
+    document.getElementById("bback").onclick=()=>{V.nlread[nl.id]=true;V.view=null;V.viewType=null;draw();};
+    const nlai=document.getElementById("bnlaibtn");if(nlai)nlai.onclick=()=>doNLSum(nl.id);
+    return;
+  }
+
+  // ── Calendar ──
+  if(V.sec==="Calendar"){bc.innerHTML=calHTML();bc.querySelectorAll(".bcfbtn").forEach(b=>b.onclick=()=>{V.cf=b.dataset.cf;draw();});return;}
+
+  // ── Trending placeholder ──
+  if(V.sec==="Trending"){bc.innerHTML=`<div class="bph"><div class="bph-t">Reddit trending</div><div class="bph-s">Live data in the full app</div></div>`;return;}
+
+  // ── Newsletters list ──
+  if(V.sec==="Newsletters"){
+    bc.innerHTML=`<div class="bsrow"><span class="bslbl">NEWSLETTERS · 48H WINDOW</span></div>`+
+    NL.map(nl=>{const tl=ntl(nl.ra),isRead=!!V.nlread[nl.id];return`<div class="bnlcard${isRead?" brd":""}" data-nlid="${nl.id}">
+      ${isRead?`<span class="brd-badge">✓</span>`:""}
+      <div class="bnlcard-inner">
+        <div><div class="bnlt">${E(nl.sub)}</div><div class="bnlm">${E(nl.from)} · ${nl.date}</div></div>
+        <span class="bttl ${tl.c}">${tl.l}</span>
+      </div>
+    </div>`;}).join("");
+    bc.querySelectorAll(".bnlcard").forEach(card=>{card.onclick=()=>{V.view=card.dataset.nlid;V.viewType="newsletter";draw();};});
+    return;
+  }
+
+  // ── Article feed (Feed + section pages) ──
+  let arts=AR;
+  if(SM[V.sec])arts=AR.filter(a=>a.topics.some(t=>SM[V.sec].includes(t)));
+  if(V.tps.length>0)arts=arts.filter(a=>a.topics.some(t=>V.tps.includes(t)));
+  const readCnt=arts.filter(a=>V.read[a.id]).length;
+  const visible=V.hideRead?arts.filter(a=>!V.read[a.id]):arts;
+
+  bc.innerHTML=`<div class="bsrow">
+    <span class="bslbl">${V.sec==="Feed"?"TOP STORIES":E(V.sec)}<span class="bsmpl">SAMPLE</span>${V.tps.length>1?`<span class="btpbadge">${V.tps.length} topics</span>`:""}</span>
+    ${readCnt>0?`<button class="bhide${V.hideRead?" on":""}" id="bhidebtn">${V.hideRead?`↺ Show all (${readCnt} read)`:`Hide read (${readCnt})`}</button>`:""}
+  </div><div class="bartgrid">${visible.length?visible.map(cardHTML).join(""):`<div class="bph"><div class="bph-t">No articles</div><div class="bph-s">Adjust topic filters or show read articles</div></div>`}</div>`;
+
+  const hb=document.getElementById("bhidebtn");if(hb)hb.onclick=()=>{V.hideRead=!V.hideRead;draw();};
+
+  bc.querySelectorAll(".bcard").forEach(card=>{
+    const id=card.dataset.id;
+    // Tag click — filter, don't open article
+    card.querySelectorAll(".btag").forEach(t=>t.onclick=e=>{
+      e.stopPropagation();const tg=t.dataset.tag;
+      const i=V.tps.indexOf(tg);if(i>=0)V.tps.splice(i,1);else V.tps.push(tg);draw();
+    });
+    // Card click → open article
+    card.onclick=e=>{if(e.target.closest(".btag"))return;V.view=id;V.viewType="article";draw();};
+  });
+}
+
+function cardHTML(a){
+  const isRead=!!V.read[a.id];
+  return`<div class="bcard${isRead?" brd":""}" data-id="${a.id}">
+    ${isRead?`<span class="brd-badge">✓</span>`:""}
+    <div class="bctop"><span class="bbdg" style="${ss(a.src)}">${E(a.src)}</span><span class="bctime">${ago(a.date)}</span></div>
+    <div class="bhl">${E(a.title)}</div>
+    <div class="bcdesc">${E(a.desc)}</div>
+    <div class="btags">${a.topics.map(t=>`<span class="btag${V.tps.includes(t)?" on":""}" data-tag="${E(t)}">${E(t)}</span>`).join("")}</div>
+  </div>`;
+}
+
+function calHTML(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const cos=["All","US","UK","EU","JP","CN","CA","AU","IN","BR","KR","MX"];
+  const evts=CAL.filter(e=>{const d=new Date(e.date);return d>=today&&(V.cf==="All"||e.co===V.cf);});
+  return`<div class="bsrow"><span class="bslbl">ECONOMIC CALENDAR · ${evts.length} EVENTS</span></div>
+  <div class="bcalf">${cos.map(c=>`<button class="bcfbtn${V.cf===c?" on":""}" data-cf="${c}">${c}</button>`).join("")}</div>`+
+  evts.map(e=>{const d=new Date(e.date);const isT=d.toDateString()===today.toDateString();const cs=CS[e.co]||"background:#f3f4f6;color:#374151";const cats=CAS[e.cat]||"background:rgba(0,0,0,.07);color:#6b7280";const imps=IPS[e.imp]||IPS.medium;return`<div class="bcalev${isT?" btoday":""}"><div><div class="bevn">${E(e.ev)}${isT?`<span class="btbdge">TODAY</span>`:""}</div><div class="bevd">${d.toLocaleDateString("en-GB",{weekday:"short",day:"2-digit",month:"short",year:"numeric"})}</div></div><div class="btrow"><span class="bctag" style="${cs}">${e.co}</span><span class="bctag" style="${cats}">${e.cat}</span><span class="bctag" style="${imps}">${e.imp.toUpperCase()}</span></div></div>`;}).join("");
+}
+
+async function doSum(id){
+  if(V.sum[id]||V.sl[id])return;V.sl[id]=true;draw();
+  try{const a=AR.find(x=>x.id===id);const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:800,messages:[{role:"user",content:"Summarise in 3-4 bullet points with market implications:\n\n"+a.title+"\n\n"+a.full+"\n\nBullets only."}]})});const d=await r.json();V.sum[id]=d.content?.[0]?.text||"Unavailable.";}
+  catch{V.sum[id]="AI summary not available in this preview.";}
+  V.sl[id]=false;draw();
+}
+async function doNLSum(id){
+  if(V.nls[id]||V.nll[id])return;V.nll[id]=true;draw();
+  try{const nl=NL.find(x=>x.id===id);const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:800,messages:[{role:"user",content:"Summarise this newsletter in 4-5 key bullets:\n\n"+nl.sub+"\n\n"+nl.body+"\n\nBullets only, focus on actionable market insights."}]})});const d=await r.json();V.nls[id]=d.content?.[0]?.text||"Unavailable.";}
+  catch{V.nls[id]="AI summary not available in this preview.";}
+  V.nll[id]=false;draw();
+}
+
+draw();
+</script>
+</body>
+</html>
