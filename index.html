@@ -359,16 +359,24 @@ function stripHTML(s){return(s||"").replace(/<[^>]*>/g," ").replace(/&amp;/g,"&"
 
 async function fetchFeeds(){
   V.loading=true;draw();
-  const BASE="https://api.rss2json.com/v1/api.json?rss_url=";
-  const res=await Promise.allSettled(FEEDS.map(f=>fetch(BASE+encodeURIComponent(f.url)).then(r=>r.json()).then(d=>({src:f.src,items:d.status==="ok"?d.items:[]}))));
+  const BASE="https://api.allorigins.win/raw?url=";
+  const res=await Promise.allSettled(FEEDS.map(f=>
+    fetch(BASE+encodeURIComponent(f.url))
+      .then(r=>r.text())
+      .then(xml=>{
+        const doc=new DOMParser().parseFromString(xml,"text/xml");
+        return{src:f.src,items:[...doc.querySelectorAll("item")]};
+      })
+  ));
   let live=[];let idx=0;
   res.forEach(r=>{
     if(r.status==="fulfilled"&&r.value.items.length){
       const{src,items}=r.value;
       items.slice(0,5).forEach(item=>{
-        const desc=stripHTML(item.description||item.content||"");
-        const full=stripHTML(item.content||item.description||"");
-        live.push({id:"r"+(idx++),src,date:new Date(item.pubDate||Date.now()).toISOString(),title:stripHTML(item.title||""),desc:desc.slice(0,220),full:full.slice(0,2500),link:item.link||""});
+        const get=tag=>item.getElementsByTagName(tag)[0]?.textContent||"";
+        const desc=stripHTML(get("description"));
+        const full=stripHTML(get("content:encoded")||get("description"));
+        live.push({id:"r"+(idx++),src,date:new Date(get("pubDate")||Date.now()).toISOString(),title:stripHTML(get("title")),desc:desc.slice(0,220),full:full.slice(0,2500),link:get("link")});
       });
     }
   });
