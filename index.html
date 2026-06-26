@@ -121,7 +121,7 @@ body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;background:#f
 
 <script>
 const E=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-const SS={"Bloomberg":"background:#dbeafe;color:#1e40af","FT":"background:#fee2e2;color:#991b1b","Reuters":"background:#d1fae5;color:#065f46","WSJ":"background:#fef3c7;color:#92400e","BBC":"background:#fee2e2;color:#b91c1c","Guardian":"background:#d1fae5;color:#065f46","AP News":"background:#f3f4f6;color:#374151","CNBC":"background:#fef3c7;color:#b45309","The Verge":"background:#ede9fe;color:#5b21b6","Wired":"background:#f3f4f6;color:#111827","Axios":"background:#f0fdf4;color:#166534"};
+const SS={"Bloomberg":"background:#dbeafe;color:#1e40af","FT":"background:#fee2e2;color:#991b1b","Reuters":"background:#d1fae5;color:#065f46","WSJ":"background:#fef3c7;color:#92400e","BBC":"background:#fee2e2;color:#b91c1c","Guardian":"background:#d1fae5;color:#065f46","AP News":"background:#f3f4f6;color:#374151","CNBC":"background:#fef3c7;color:#b45309","The Verge":"background:#ede9fe;color:#5b21b6","Wired":"background:#f3f4f6;color:#111827","Axios":"background:#f0fdf4;color:#166534","TechCrunch":"background:#ede9fe;color:#4c1d95","MarketWatch":"background:#fef3c7;color:#78350f","BBC Sport":"background:#dbeafe;color:#1e3a8a"};
 const ss=n=>SS[n]||"background:#f3f4f6;color:#6b7280";
 const CS={"US":"background:#dbeafe;color:#1e40af","UK":"background:#fce7f3;color:#9d174d","EU":"background:#e0e7ff;color:#3730a3","JP":"background:#fee2e2;color:#991b1b","CN":"background:#fef3c7;color:#92400e","CA":"background:#d1fae5;color:#065f46","AU":"background:#fef3c7;color:#b45309","IN":"background:#f3e8ff;color:#6b21a8","BR":"background:#d1fae5;color:#15803d","KR":"background:#dbeafe;color:#1d4ed8","MX":"background:#d1fae5;color:#065f46"};
 const CAS={"Central Banks":"background:rgba(109,40,217,.1);color:#5b21b6","Inflation":"background:rgba(220,38,38,.1);color:#991b1b","Labour":"background:rgba(37,99,235,.1);color:#1e40af","Growth":"background:rgba(22,163,74,.1);color:#15803d","Activity":"background:rgba(8,145,178,.1);color:#0e7490"};
@@ -133,7 +133,7 @@ function ago(d){const m=Math.floor((Date.now()-new Date(d))/60000);if(m<60)retur
 function ntl(ra){const h=Math.floor((172800000-(Date.now()-ra))/3600000);if(h<=0)return{l:"Expired",c:"bur"};if(h<3)return{l:h+"h left",c:"bur"};if(h<12)return{l:h+"h left",c:"bwrn"};return{l:h+"h left",c:"bok"};}
 
 const N=Date.now();
-const AR=[
+const AR_MOCK=[
   {id:"1",src:"Bloomberg",date:new Date(N-240000).toISOString(),
    title:"Fed holds rates as inflation data complicates Warsh's first meeting",
    desc:"Four FOMC dissenters signal growing hawkish tilt. Markets now pricing next move as a hike rather than a cut, with fed funds expected above 4.5% through 2026.",
@@ -175,6 +175,7 @@ const AR=[
    desc:"Cartel responds to weakening demand from China and rising US inventory builds. Saudi Arabia leads a 500k bpd reduction effective August.",
    full:"OPEC+ announced an unscheduled additional output cut of 500,000 barrels per day effective August 1, catching markets off-guard ahead of a scheduled ministerial meeting next month. Saudi Arabia will bear the bulk of the reduction, consistent with its role as the cartel's swing producer. The decision was prompted by Brent crude sliding toward $88 on the back of weaker-than-expected Chinese demand data and a 4.2 million barrel US inventory build reported by the EIA on Wednesday. Brent crude rose 2.1% on the news to $91.40 before paring gains. The cut deepens tension with Russia, which has repeatedly missed its own production targets, and with non-OPEC producers including Brazil and Guyana who continue to grow output."},
 ].map(a=>({...a,topics:gT(a.title,a.desc)}));
+let AR=AR_MOCK;
 
 const IX=[{l:"S&P 500",p:5847.2,c:0.30},{l:"Nasdaq",p:18923,c:-0.23},{l:"Dow",p:42340,c:0.18},{l:"FTSE 100",p:8421,c:0.37},{l:"DAX",p:18934,c:0.52},{l:"Nikkei",p:39210,c:-0.41},{l:"Hang Seng",p:22341,c:-0.87},{l:"US 10Y",p:4.71,c:1.72,f:v=>v.toFixed(2)+"%"},{l:"Brent",p:91.40,c:-1.21,f:v=>"$"+v.toFixed(2)},{l:"DXY",p:107.92,c:0.41},{l:"USD/JPY",p:161.3,c:0.40},{l:"GBP/USD",p:1.2634,c:-0.71,f:v=>v.toFixed(4)},{l:"Gold",p:2341,c:0.53},{l:"VIX",p:17.82,c:2.47}];
 
@@ -189,7 +190,7 @@ const NL=[
 
 const CAL=[{date:"2026-06-18",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-06-18",ev:"BOE Rate Decision",cat:"Central Banks",imp:"high",co:"UK"},{date:"2026-06-19",ev:"UK CPI",cat:"Inflation",imp:"high",co:"UK"},{date:"2026-06-25",ev:"US GDP Final (Q1)",cat:"Growth",imp:"high",co:"US"},{date:"2026-06-27",ev:"US PCE Deflator",cat:"Inflation",imp:"high",co:"US"},{date:"2026-06-30",ev:"China NBS PMI",cat:"Activity",imp:"high",co:"CN"},{date:"2026-07-02",ev:"US Non-Farm Payrolls",cat:"Labour",imp:"high",co:"US"},{date:"2026-07-10",ev:"US CPI",cat:"Inflation",imp:"high",co:"US"},{date:"2026-07-15",ev:"China GDP (Q2)",cat:"Growth",imp:"high",co:"CN"},{date:"2026-07-21",ev:"Japan CPI",cat:"Inflation",imp:"medium",co:"JP"},{date:"2026-07-24",ev:"RBA Rate Decision",cat:"Central Banks",imp:"medium",co:"AU"},{date:"2026-07-29",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-07-31",ev:"BOJ Rate Decision",cat:"Central Banks",imp:"high",co:"JP"},{date:"2026-08-01",ev:"US Non-Farm Payrolls",cat:"Labour",imp:"high",co:"US"},{date:"2026-08-07",ev:"BOE MPC Decision",cat:"Central Banks",imp:"high",co:"UK"},{date:"2026-08-13",ev:"US CPI",cat:"Inflation",imp:"high",co:"US"},{date:"2026-08-15",ev:"Japan GDP (Q2)",cat:"Growth",imp:"high",co:"JP"},{date:"2026-08-21",ev:"Jackson Hole Symposium",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-09-04",ev:"US Non-Farm Payrolls",cat:"Labour",imp:"high",co:"US"},{date:"2026-09-10",ev:"ECB Rate Decision",cat:"Central Banks",imp:"high",co:"EU"},{date:"2026-09-16",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-09-17",ev:"BOE MPC Decision",cat:"Central Banks",imp:"high",co:"UK"},{date:"2026-09-24",ev:"BOJ Rate Decision",cat:"Central Banks",imp:"high",co:"JP"},{date:"2026-10-09",ev:"US CPI",cat:"Inflation",imp:"high",co:"US"},{date:"2026-10-15",ev:"China GDP (Q3)",cat:"Growth",imp:"high",co:"CN"},{date:"2026-10-22",ev:"ECB Rate Decision",cat:"Central Banks",imp:"high",co:"EU"},{date:"2026-10-28",ev:"BOJ Rate Decision",cat:"Central Banks",imp:"high",co:"JP"},{date:"2026-11-04",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-11-05",ev:"BOE MPC Decision",cat:"Central Banks",imp:"high",co:"UK"},{date:"2026-11-06",ev:"US Non-Farm Payrolls",cat:"Labour",imp:"high",co:"US"},{date:"2026-12-09",ev:"FOMC Rate Decision",cat:"Central Banks",imp:"high",co:"US"},{date:"2026-12-11",ev:"ECB Rate Decision",cat:"Central Banks",imp:"high",co:"EU"},{date:"2026-12-17",ev:"BOE MPC Decision",cat:"Central Banks",imp:"high",co:"UK"}];
 
-const V={sec:"Feed",tps:[],sum:{},sl:{},read:{},hideRead:false,nls:{},nll:{},nlread:{},cf:"All",view:null,viewType:null};
+const V={sec:"Feed",tps:[],sum:{},sl:{},read:{},hideRead:false,nls:{},nll:{},nlread:{},cf:"All",view:null,viewType:null,loading:false};
 const NAV=["Feed","Markets","Macro","Geopolitics","AI & Tech","Sports","Trending","Newsletters","Calendar"];
 const SM={Markets:["Equities","FX & Rates"],Macro:["Macro","FX & Rates"],Geopolitics:["Geopolitics"],"AI & Tech":["AI & Tech"],Sports:["Sports"]};
 
@@ -230,7 +231,7 @@ function draw(){
       <div class="bview-note">In production, the full article text loads from the source via RSS. Paywalled articles (FT, WSJ) open externally.</div>
       <div class="bview-actions">
         <button class="baibtn" id="baibtn" ${sl||sum?"disabled":""}>${sl?"Summarising…":sum?"✓ Summarised":"⚡ AI Summarise"}</button>
-        <a class="bopen-lnk" href="#" onclick="return false">Open full article ↗</a>
+        ${a.link?`<a class="bopen-lnk" href="${E(a.link)}" target="_blank" rel="noopener">Open full article ↗</a>`:`<a class="bopen-lnk" href="#" onclick="return false">Open full article ↗</a>`}
       </div>
       ${sum?`<div class="baiout">${E(sum)}</div>`:""}
     </div>`;
@@ -282,6 +283,9 @@ function draw(){
     bc.querySelectorAll(".bnlcard").forEach(card=>{card.onclick=()=>{V.view=card.dataset.nlid;V.viewType="newsletter";draw();};});
     return;
   }
+
+  // ── Loading state ──
+  if(V.loading){bc.innerHTML=`<div class="bph"><div class="bph-t">Loading live feeds…</div><div class="bph-s">Fetching headlines from CNBC, BBC, Guardian and more</div></div>`;return;}
 
   // ── Article feed (Feed + section pages) ──
   let arts=AR;
@@ -342,7 +346,40 @@ async function doNLSum(id){
   V.nll[id]=false;draw();
 }
 
-draw();
+const FEEDS=[
+  {src:"CNBC",url:"https://www.cnbc.com/id/20910258/device/rss/rss.html"},
+  {src:"BBC",url:"https://feeds.bbci.co.uk/news/world/rss.xml"},
+  {src:"Guardian",url:"https://www.theguardian.com/world/rss"},
+  {src:"TechCrunch",url:"https://techcrunch.com/feed/"},
+  {src:"BBC Sport",url:"https://feeds.bbci.co.uk/sport/rss.xml"},
+  {src:"MarketWatch",url:"https://feeds.marketwatch.com/marketwatch/topstories/"},
+];
+
+function stripHTML(s){return(s||"").replace(/<[^>]*>/g," ").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g," ").replace(/\s+/g," ").trim();}
+
+async function fetchFeeds(){
+  V.loading=true;draw();
+  const BASE="https://api.rss2json.com/v1/api.json?rss_url=";
+  const res=await Promise.allSettled(FEEDS.map(f=>fetch(BASE+encodeURIComponent(f.url)).then(r=>r.json()).then(d=>({src:f.src,items:d.status==="ok"?d.items:[]}))));
+  let live=[];let idx=0;
+  res.forEach(r=>{
+    if(r.status==="fulfilled"&&r.value.items.length){
+      const{src,items}=r.value;
+      items.slice(0,5).forEach(item=>{
+        const desc=stripHTML(item.description||item.content||"");
+        const full=stripHTML(item.content||item.description||"");
+        live.push({id:"r"+(idx++),src,date:new Date(item.pubDate||Date.now()).toISOString(),title:stripHTML(item.title||""),desc:desc.slice(0,220),full:full.slice(0,2500),link:item.link||""});
+      });
+    }
+  });
+  if(live.length){
+    live.sort((a,b)=>new Date(b.date)-new Date(a.date));
+    AR=live.map(a=>({...a,topics:gT(a.title,a.desc)}));
+  }
+  V.loading=false;draw();
+}
+
+fetchFeeds();
 </script>
 </body>
 </html>
