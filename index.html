@@ -295,7 +295,7 @@ function draw(){
   const visible=V.hideRead?arts.filter(a=>!V.read[a.id]):arts;
 
   bc.innerHTML=`<div class="bsrow">
-    <span class="bslbl">${V.sec==="Feed"?"TOP STORIES":E(V.sec)}<span class="bsmpl">SAMPLE</span>${V.tps.length>1?`<span class="btpbadge">${V.tps.length} topics</span>`:""}</span>
+    <span class="bslbl">${V.sec==="Feed"?"TOP STORIES":E(V.sec)}${AR===AR_MOCK?`<span class="bsmpl">SAMPLE</span>`:""}${V.tps.length>1?`<span class="btpbadge">${V.tps.length} topics</span>`:""}</span>
     ${readCnt>0?`<button class="bhide${V.hideRead?" on":""}" id="bhidebtn">${V.hideRead?`↺ Show all (${readCnt} read)`:`Hide read (${readCnt})`}</button>`:""}
   </div><div class="bartgrid">${visible.length?visible.map(cardHTML).join(""):`<div class="bph"><div class="bph-t">No articles</div><div class="bph-s">Adjust topic filters or show read articles</div></div>`}</div>`;
 
