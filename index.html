@@ -121,7 +121,7 @@ body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;background:#f
 
 <script>
 const E=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-const SS={"Bloomberg":"background:#dbeafe;color:#1e40af","FT":"background:#fee2e2;color:#991b1b","Reuters":"background:#d1fae5;color:#065f46","WSJ":"background:#fef3c7;color:#92400e","BBC":"background:#fee2e2;color:#b91c1c","Guardian":"background:#d1fae5;color:#065f46","AP News":"background:#f3f4f6;color:#374151","CNBC":"background:#fef3c7;color:#b45309","The Verge":"background:#ede9fe;color:#5b21b6","Wired":"background:#f3f4f6;color:#111827","Axios":"background:#f0fdf4;color:#166534","TechCrunch":"background:#ede9fe;color:#4c1d95","MarketWatch":"background:#fef3c7;color:#78350f","BBC Sport":"background:#dbeafe;color:#1e3a8a"};
+const SS={"Bloomberg":"background:#dbeafe;color:#1e40af","FT":"background:#fee2e2;color:#991b1b","Reuters":"background:#d1fae5;color:#065f46","WSJ":"background:#fef3c7;color:#92400e","BBC":"background:#fee2e2;color:#b91c1c","Guardian":"background:#d1fae5;color:#065f46","AP News":"background:#f3f4f6;color:#374151","CNBC":"background:#fef3c7;color:#b45309","The Verge":"background:#ede9fe;color:#5b21b6","Wired":"background:#f3f4f6;color:#111827","Axios":"background:#f0fdf4;color:#166534","TechCrunch":"background:#ede9fe;color:#4c1d95","MarketWatch":"background:#fef3c7;color:#78350f","BBC Sport":"background:#dbeafe;color:#1e3a8a","Yahoo Finance":"background:#ede9fe;color:#5b21b6","Investing.com":"background:#d1fae5;color:#065f46","Seeking Alpha":"background:#fff7ed;color:#c2410c","Financial Post":"background:#fee2e2;color:#991b1b","BBC Business":"background:#fee2e2;color:#b91c1c","Guardian Business":"background:#d1fae5;color:#065f46","AP Business":"background:#f3f4f6;color:#374151","BBC World":"background:#fee2e2;color:#b91c1c","AP World":"background:#f3f4f6;color:#374151","Al Jazeera":"background:#d1fae5;color:#14532d","Ars Technica":"background:#fff7ed;color:#c2410c","VentureBeat":"background:#dbeafe;color:#1e40af","Hacker News":"background:#fff7ed;color:#ea580c","Sky Sports":"background:#dbeafe;color:#1d4ed8","ESPN":"background:#fee2e2;color:#b91c1c","Guardian Sport":"background:#d1fae5;color:#065f46","Guardian World":"background:#d1fae5;color:#065f46"};
 const ss=n=>SS[n]||"background:#f3f4f6;color:#6b7280";
 const CS={"US":"background:#dbeafe;color:#1e40af","UK":"background:#fce7f3;color:#9d174d","EU":"background:#e0e7ff;color:#3730a3","JP":"background:#fee2e2;color:#991b1b","CN":"background:#fef3c7;color:#92400e","CA":"background:#d1fae5;color:#065f46","AU":"background:#fef3c7;color:#b45309","IN":"background:#f3e8ff;color:#6b21a8","BR":"background:#d1fae5;color:#15803d","KR":"background:#dbeafe;color:#1d4ed8","MX":"background:#d1fae5;color:#065f46"};
 const CAS={"Central Banks":"background:rgba(109,40,217,.1);color:#5b21b6","Inflation":"background:rgba(220,38,38,.1);color:#991b1b","Labour":"background:rgba(37,99,235,.1);color:#1e40af","Growth":"background:rgba(22,163,74,.1);color:#15803d","Activity":"background:rgba(8,145,178,.1);color:#0e7490"};
@@ -347,12 +347,34 @@ async function doNLSum(id){
 }
 
 const FEEDS=[
-  {src:"CNBC",url:"https://www.cnbc.com/id/20910258/device/rss/rss.html"},
-  {src:"BBC",url:"https://feeds.bbci.co.uk/news/world/rss.xml"},
-  {src:"Guardian",url:"https://www.theguardian.com/world/rss"},
+  // Markets / Finance
+  {src:"CNBC",url:"https://www.cnbc.com/id/100003114/device/rss/rss.html"},
+  {src:"MarketWatch",url:"https://feeds.content.dowjones.io/public/rss/mw_topstories"},
+  {src:"Yahoo Finance",url:"https://finance.yahoo.com/news/rssindex"},
+  {src:"Investing.com",url:"https://www.investing.com/rss/news.rss"},
+  {src:"Seeking Alpha",url:"https://seekingalpha.com/market_currents.xml"},
+  {src:"Financial Post",url:"https://financialpost.com/feed"},
+  // Macro / Economics
+  {src:"Guardian Business",url:"https://www.theguardian.com/business/economics/rss"},
+  {src:"BBC Business",url:"https://feeds.bbci.co.uk/news/business/rss.xml"},
+  {src:"AP Business",url:"https://apnews.com/hub/business?format=feed&type=rss"},
+  // Geopolitics / World
+  {src:"BBC World",url:"https://feeds.bbci.co.uk/news/world/rss.xml"},
+  {src:"Guardian World",url:"https://www.theguardian.com/world/rss"},
+  {src:"Al Jazeera",url:"https://www.aljazeera.com/xml/rss/all.xml"},
+  {src:"AP World",url:"https://apnews.com/hub/world-news?format=feed&type=rss"},
+  // AI & Tech
   {src:"TechCrunch",url:"https://techcrunch.com/feed/"},
+  {src:"The Verge",url:"https://www.theverge.com/rss/index.xml"},
+  {src:"Ars Technica",url:"https://feeds.arstechnica.com/arstechnica/index"},
+  {src:"Wired",url:"https://www.wired.com/feed/rss"},
+  {src:"VentureBeat",url:"https://venturebeat.com/feed/"},
+  {src:"Hacker News",url:"https://hnrss.org/frontpage"},
+  // Sports
   {src:"BBC Sport",url:"https://feeds.bbci.co.uk/sport/rss.xml"},
-  {src:"MarketWatch",url:"https://feeds.marketwatch.com/marketwatch/topstories/"},
+  {src:"Sky Sports",url:"https://www.skysports.com/rss/12040"},
+  {src:"ESPN",url:"https://www.espn.com/espn/rss/news"},
+  {src:"Guardian Sport",url:"https://www.theguardian.com/sport/rss"},
 ];
 
 function stripHTML(s){return(s||"").replace(/<[^>]*>/g," ").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g," ").replace(/\s+/g," ").trim();}
@@ -372,7 +394,7 @@ async function fetchFeeds(){
   res.forEach(r=>{
     if(r.status==="fulfilled"&&r.value.items.length){
       const{src,items}=r.value;
-      items.slice(0,5).forEach(item=>{
+      items.slice(0,8).forEach(item=>{
         const get=tag=>item.getElementsByTagName(tag)[0]?.textContent||"";
         const desc=stripHTML(get("description"));
         const full=stripHTML(get("content:encoded")||get("description"));
